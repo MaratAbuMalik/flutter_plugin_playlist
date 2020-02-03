@@ -75,6 +75,12 @@ class _MyAppState extends State<MyApp> {
           artist: "Friends",
           assetUrl: "asset://assets/kitabut_tauheed_141.mp3",
           title: "F.R.I.E.N.D.S"),
+      new AudioTrack(
+          trackId: 'qq1',
+          album: "Friends",
+          artist: "Friends",
+          assetUrl: "asset://assets/kitab_at_tauhid_dinar_ibn_baz_10.mp3",
+          title: "F.R.I.E.N.D.S"),
     ],options:
     new PlaylistItemOptions(
       startPaused: true));
@@ -86,18 +92,6 @@ class _MyAppState extends State<MyApp> {
 
   _playFromId() async {
     await rmxAudioPlayer.playTrackById("friend_bon_jovi");
-  }
-
-  _addMore() async {
-    await rmxAudioPlayer.addItem(
-      new AudioTrack(
-          album: "Friends",
-          artist: "Friends",
-          assetUrl:
-              "asset://assets/kitabut_tauheed_141.mp3",
-          title: "F.R.I.E.N.D.S"),
-      index: 1,
-    );
   }
 
   _play() async {
