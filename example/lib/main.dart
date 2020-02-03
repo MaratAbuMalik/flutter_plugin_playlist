@@ -61,17 +61,25 @@ class _MyAppState extends State<MyApp> {
           album: "Friends",
           artist: "Bon Jovi",
           assetUrl:
-          "https://www.soundboard.com/mediafiles/22/223554-d1826dea-bfc3-477b-a316-20ded5e63e08.mp3",
+          "https://toislam.podster.fm/77/download/audio.mp3",
           title: "I'll be there for you"),
       new AudioTrack(
           album: "Friends",
           artist: "Ross",
           assetUrl:
-          "https://www.soundboard.com/mediafiles/22/223554-fea5dfff-6c80-4e13-b0cf-9926198f50f3.mp3",
+          "http://files.alhadis.ru/audio/abu_yahya/aqida/kitabut_tauheed/kitabut_tauheed_084.mp3",
           title: "The Sound"),
-    ]);
+      new AudioTrack(
+          trackId: 'qq',
+          album: "Friends",
+          artist: "Friends",
+          assetUrl: "asset://assets/kitabut_tauheed_141.mp3",
+          title: "F.R.I.E.N.D.S"),
+    ],options:
+    new PlaylistItemOptions(
+      startPaused: true));
 
-    await rmxAudioPlayer.setLoop(true);
+//    await rmxAudioPlayer.setLoop(true);
 
     await _play();
   }
@@ -86,7 +94,7 @@ class _MyAppState extends State<MyApp> {
           album: "Friends",
           artist: "Friends",
           assetUrl:
-              "asset://assets/223554-3943c7cb-46e0-48b1-a954-057b71140e49.mp3",
+              "asset://assets/kitabut_tauheed_141.mp3",
           title: "F.R.I.E.N.D.S"),
       index: 1,
     );
@@ -188,10 +196,6 @@ class _MyAppState extends State<MyApp> {
                 RawMaterialButton(
                   onPressed: _playFromId,
                   child: Text("Play Opening"),
-                ),
-                RawMaterialButton(
-                  onPressed: _addMore,
-                  child: Text("Add More"),
                 ),
               ],
             ),
