@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_plugin_playlist/flutter_plugin_playlist.dart';
 
-RmxAudioPlayer rmxAudioPlayer = new RmxAudioPlayer();
+import 'audios.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MaterialApp(
+      title: 'Audio Sample App',
+      home: MyApp(),
+    ));
 
 class MyApp extends StatefulWidget {
   @override
@@ -11,20 +14,124 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Player Example'),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            RaisedButton(
+                child: const Text("Качества успешного призывающего"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Playlist(playlist1)),
+                  );
+                }),
+            RaisedButton(
+                child: const Text("Сабр — Вещи, помогающие проявлять терпение"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Playlist(playlist2)),
+                  );
+                }),
+            RaisedButton(
+                child: const Text("Совершенство шариата"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Playlist(playlist3)),
+                  );
+                }),
+            RaisedButton(
+                child: const Text("Понимание мольбы"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Playlist(playlist4)),
+                  );
+                }),
+            RaisedButton(
+                child: const Text("Пользы зикра и его плоды"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Playlist(playlist5)),
+                  );
+                }),
+            RaisedButton(
+                child: const Text(
+                    "Некоторые пользы, извлекаемые из суры «аль-Фатиха»"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Playlist(playlist6)),
+                  );
+                }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void initState() {
+    super.initState();
+  }
+}
+
+class Playlist extends StatefulWidget {
+  List playlist;
+  Playlist(this.playlist);
+
+  @override
+  _PlaylistState createState() => _PlaylistState();
+}
+
+class _PlaylistState extends State<Playlist> {
+  RmxAudioPlayer rmxAudioPlayer;
+  String _status = 'none';
   double _seeking;
   double _position = 0;
 
   int _current = 0;
   int _total = 0;
 
-  String _status = 'none';
+  _play() async {
+    setState(() {});
+
+    await rmxAudioPlayer.play();
+  }
+
+  _pause() {
+    rmxAudioPlayer.pause().then((_) {
+      print(_);
+      setState(() {});
+    }).catchError(print);
+  }
+
+  @override
+  void dispose() {
+    rmxAudioPlayer.clearAllItems();
+
+//    rmxAudioPlayer.off('status', (eventName, {dynamic args}) {dispose();});
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-
+    rmxAudioPlayer = RmxAudioPlayer();
     rmxAudioPlayer.initialize();
-
+    _prepare(widget.playlist);
     rmxAudioPlayer.on('status', (eventName, {dynamic args}) {
       print(eventName + (args ?? "").toString());
 
@@ -54,149 +161,61 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  _prepare() async {
-    await rmxAudioPlayer.setPlaylistItems([
-      new AudioTrack(
-          trackId: 'friend_bon_jovi',
-          album: "Friends",
-          artist: "Bon Jovi",
-          assetUrl:
-          "https://toislam.podster.fm/77/download/audio.mp3",
-          title: "I'll be there for you"),
-      new AudioTrack(
-          album: "Friends",
-          artist: "Ross",
-          assetUrl:
-          "http://files.alhadis.ru/audio/abu_yahya/aqida/kitabut_tauheed/kitabut_tauheed_084.mp3",
-          title: "The Sound"),
-      new AudioTrack(
-          trackId: 'qq',
-          album: "Friends",
-          artist: "Friends",
-          assetUrl: "asset://assets/kitabut_tauheed_141.mp3",
-          title: "F.R.I.E.N.D.S"),
-      new AudioTrack(
-          trackId: 'qq1',
-          album: "Friends",
-          artist: "Friends",
-          assetUrl: "asset://assets/kitab_at_tauhid_dinar_ibn_baz_10.mp3",
-          title: "F.R.I.E.N.D.S"),
-    ],options:
-    new PlaylistItemOptions(
-      startPaused: true));
-
-//    await rmxAudioPlayer.setLoop(true);
-
-    await _play();
-  }
-
-  _playFromId() async {
-    await rmxAudioPlayer.playTrackById("friend_bon_jovi");
-  }
-
-  _play() async {
-    setState(() {});
-
-    await rmxAudioPlayer.play();
-  }
-
-  _pause() {
-    rmxAudioPlayer.pause().then((_) {
-      print(_);
-      setState(() {});
-    }).catchError(print);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text('Player Example'),
         ),
-        body: Center(
-          child: _body(),
-        ),
-      ),
-    );
-  }
-
-  Widget _body() {
-    if (_status == 'none' || _status == 'stopped') {
-      return _actionPrepare();
-    }
-
-    return _player();
-  }
-
-  Widget _actionPrepare() {
-    return RaisedButton(
-      child: const Text("Prepare Playlist"),
-      onPressed: _prepare,
-    );
-  }
-
-  Widget _player() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Text(_format(_current)),
-              new Text(_format(_total))
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  new Text(_format(_current)),
+                  new Text(_format(_total))
+                ],
+              ),
+              Slider(
+                value: _seeking ?? _position,
+                onChangeEnd: (val) async {
+                  if (_total > 0) {
+                    await rmxAudioPlayer.seekTo(val * _total);
+                  }
+                },
+                onChanged: (val) {
+                  if (_total > 0) {
+                    setState(() {
+                      _seeking = val;
+                    });
+                  }
+                },
+              ),
+              Material(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: rmxAudioPlayer.skipBack,
+                      icon: const Icon(Icons.skip_previous),
+                    ),
+                    IconButton(
+                      onPressed: _onPressed(),
+                      icon: _icon(),
+                    ),
+                    IconButton(
+                      onPressed: rmxAudioPlayer.skipForward,
+                      icon: const Icon(Icons.skip_next),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-          Slider(
-            value: _seeking ?? _position,
-            onChangeEnd: (val) async {
-              if (_total > 0) {
-                await rmxAudioPlayer.seekTo(val * _total);
-              }
-            },
-            onChanged: (val) {
-              if (_total > 0) {
-                setState(() {
-                  _seeking = val;
-                });
-              }
-            },
-          ),
-          Material(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                IconButton(
-                  onPressed: rmxAudioPlayer.skipBack,
-                  icon: const Icon(Icons.skip_previous),
-                ),
-                IconButton(
-                  onPressed: _onPressed(),
-                  icon: _icon(),
-                ),
-                IconButton(
-                  onPressed: rmxAudioPlayer.skipForward,
-                  icon: const Icon(Icons.skip_next),
-                ),
-              ],
-            ),
-          ),
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RawMaterialButton(
-                  onPressed: _playFromId,
-                  child: Text("Play Opening"),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+        ));
   }
 
   String _format(int secs) {
@@ -231,5 +250,14 @@ class _MyAppState extends State<MyApp> {
     }
 
     return const Icon(Icons.play_circle_outline);
+  }
+
+  _prepare(playlist) async {
+    await rmxAudioPlayer.setPlaylistItems(playlist,
+        options: new PlaylistItemOptions(startPaused: true));
+
+//    await rmxAudioPlayer.setLoop(true);
+
+//    await _play();
   }
 }

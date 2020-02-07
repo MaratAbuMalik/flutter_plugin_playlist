@@ -36,9 +36,15 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
-    - assets/223554-3943c7cb-46e0-48b1-a954-057b71140e49.mp3
-    - assets/kitabut_tauheed_141.mp3
-    - assets/kitab_at_tauhid_dinar_ibn_baz_10.mp3
+    - assets/1_1.mp3
+    - assets/1_2.mp3
+    - assets/3_1.mp3
+    - assets/3_2.mp3
+    - assets/3_3.mp3
+    - assets/3_4.mp3
+    - assets/3_5.mp3
+    - assets/5_1.mp3
+    - assets/5_2.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
